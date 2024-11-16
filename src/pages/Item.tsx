@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import ProductType from "../types/ItemType";
 import CategoryType from "../types/CategoriesType";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 function Items(){
+
+    const{isAuthenticated,jwtToken}=useAuth();
+
     const [Products,setProducts]=useState<ProductType[]>([]);
     const[productName, setProductName]=useState<string>("");
     const[productDescription, setProductDescription]=useState<string>("");
@@ -10,8 +14,14 @@ function Items(){
     const[CategoryId, setCategoryId]=useState<number>(0);
     const[categories, setCategories]=useState<CategoryType[]>([]);
 
+    const config={
+        headers:{
+            Authorization:`Bearer ${jwtToken}`
+        }
+    }
+
     async function getProducts() {
-        const response = await axios.get("http://localhost:8081/item")
+        const response = await axios.get("http://localhost:8081/item",config)
         setProducts(response.data);
     }
 
@@ -39,7 +49,7 @@ function Items(){
     }
 
     async function loadCategories(){
-        const apiResponse=await axios.get("http://localhost:8081/category");
+        const apiResponse=await axios.get("http://localhost:8081/category",config);
         setCategories(apiResponse.data);
     }
 
@@ -56,9 +66,11 @@ function Items(){
     }
 
     useEffect(function () {
-        getProducts();
-        loadCategories();
-    },[])
+        if(isAuthenticated){
+            getProducts();
+            loadCategories();
+        }
+    },[isAuthenticated])
 
     const [productEditing, setProductEditing]=useState<ProductType | null>();
 

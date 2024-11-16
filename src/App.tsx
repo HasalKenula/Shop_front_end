@@ -16,13 +16,20 @@ import Orders from './pages/orders/Orders'
 //import CreateOrder from './pages/orders/Createorder'
 import Items from './pages/Item'
 import Stocks from './pages/Stock'
+import { AuthProvider } from './context/AuthContext'
+import Login from './pages/auth/Login'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   //const [count, setCount] = useState(0)
 
   return (
+
+    <AuthProvider>
     <BrowserRouter>
       <Routes>
+        {/*Protected routes - need login to access */}
+        <Route element={<ProtectedRoute/>}>
         <Route path="/" element={<Home/>}/>
         
         
@@ -33,9 +40,14 @@ function App() {
         <Route path="/orders" element={<Orders/>}/>
         <Route path="/stock" element={<Stocks/>} />
        < Route path="/item" element={<Items/>}/>
+       </Route>
+
+         {/*Open routes  */}
+       <Route path="/auth/login" element={<Login/>}/>
 
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
   )
 }
 

@@ -2,8 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Furniture from "../components/furniture";
 import Tree from "../components/Tree";
+import { useAuth } from "../context/AuthContext";
 
 function Home(){
+
+    const{logout}=useAuth();
+
+
     const [counter, setCounter]=useState<number>(0);
     const [userName, setUsername]=useState<string>("");
     const [multiply, setMultiply]= useState<number>(1);
@@ -46,10 +51,21 @@ function Home(){
     }
 
     return(
+
+
         <div className="container mx-auto pt-20 pb-5 px-[40%]">
+
+            <div>
+                <Link to="/categories" className="bg-gray-800 text-white px-5 py-2 me-3">Category</Link>
+                <Link to="/item" className="bg-gray-800 text-white px-5 py-2 me-3">Item</Link>
+                <Link to="/stock" className="bg-gray-800 text-white px-5 py-2 me-3">Stock</Link>
+                <Link to="/profile" className="bg-gray-800 text-white px-5 py-2 me-3">Setting</Link>
+                <button className="bg-gray-800 text-white px-5 py-2 me-3" onClick={logout}>Logout</button>
+            </div>
+
             <h1>{counter}</h1>
             <h1>Welcome {userName}</h1>
-            <Link to="/profile">Setting</Link>
+            
             <input type="text" onChange={handelUserName}/>
             <button onClick={increase}>Increaase Counter</button>
             <button onClick={decrease}>decrase Counter</button>
