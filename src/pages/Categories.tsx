@@ -1,13 +1,25 @@
 import { useEffect, useState } from "react";
 import CategoriesType from "../types/CategoriesType";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 function Categories(){
+
+    const{isAuthenticated,jwtToken}=useAuth();
+
+
     const[categories,setCategories]=useState<CategoriesType[]>([]);
     const[categoryName,setCategoryName]=useState<string>("");
 
+    const config={
+        headers:{
+            Authorization:`Bearer ${jwtToken}`
+        }
+    }
+
+
     async function loadCategories(){
-        const apiResponse=await axios.get("http://localhost:8081/category");
+        const apiResponse=await axios.get("http://localhost:8081/category",config);
         setCategories(apiResponse.data);
     }
 
@@ -18,13 +30,13 @@ function Categories(){
     async function addCategory() {
         await axios.post("http://localhost:8081/category",{
             name:categoryName
-        });
+        },config);
         loadCategories();
     }
 
     useEffect(function (){
         loadCategories();
-    },[])
+    },[isAuthenticated])
 
     return(
         <div className="container mx-auto pt-5 pb-5">

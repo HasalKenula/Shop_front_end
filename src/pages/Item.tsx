@@ -61,7 +61,7 @@ function Items(){
             categoryId:CategoryId
 
             
-        });
+        },config);
         getProducts();
     }
 
@@ -89,7 +89,7 @@ function Items(){
                 description:productDescription,
                 price:productPrice,
                 categoryId:CategoryId
-            });
+            },config);
             getProducts();
             setProductEditing(null);
             setProductName("");
@@ -103,7 +103,7 @@ function Items(){
 
     async function deleteProduct(produtId:number) {
         try {
-            await axios.delete(`http://localhost:8081/item/${produtId}`);
+            await axios.delete(`http://localhost:8081/item/${produtId}`,config);
             getProducts();
         } catch (error) {
             console.log(error);

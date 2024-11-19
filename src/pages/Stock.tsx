@@ -2,16 +2,28 @@ import { useEffect, useState } from "react";
 import ItemType from "../types/ItemType";
 import StockType from "../types/StockType";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 
 function Stocks(){
+
+    const{isAuthenticated,jwtToken}=useAuth();
+
+
     const[stocks,setStocks]=useState<StockType[]>([]);
     const[stockQty,setStockQty]=useState<number>(0);
     const[itemId,setItemId]=useState<number>(0);
     const[items,setItems]=useState<ItemType[]>([]);
 
+    const config={
+        headers:{
+            Authorization:`Bearer ${jwtToken}`
+        }
+    }
+
+
     async function getStocks(){
-        const response=await axios.get("http://localhost:8081/stock");
+        const response=await axios.get("http://localhost:8081/stock",config);
         setStocks(response.data);
     }
 
@@ -24,7 +36,7 @@ function Stocks(){
     }
 
     async function loadItems(){
-        const apiResponse=await axios.get("http://localhost:8081/item");
+        const apiResponse=await axios.get("http://localhost:8081/item",config);
         setItems(apiResponse.data);
     }
 
@@ -32,14 +44,14 @@ function Stocks(){
         await axios.post("http://localhost:8081/stock",{
             qty:stockQty,
             itemId:itemId,
-        })
+        },config)
         getStocks();
     }
 
     useEffect(function(){
         getStocks();
         loadItems();
-    },[])
+    },[isAuthenticated])
 
     const [stockEditing,setStockEditing]=useState<StockType|null>();
 
@@ -54,7 +66,7 @@ function Stocks(){
             await axios.put(`http://localhost:8081/stock/${stockEditing?.id}`,{
                 qty:stockQty,
                 itemId:itemId,
-            });
+            },config);
             getStocks();
             setStockEditing(null);
             setStockQty(0);
@@ -67,7 +79,7 @@ function Stocks(){
 
     async function deleteStock(stockId:number){
         try {
-            await axios.delete(`http://localhost:8081/stock/${stockId}`);
+            await axios.delete(`http://localhost:8081/stock/${stockId}`,config);
             getStocks();
         } catch (error) {
             console.log(error);
