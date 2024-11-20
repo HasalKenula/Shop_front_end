@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
+import Market from "../assets/market.jpg";
 
 function Home(){
 
@@ -27,8 +28,20 @@ function Home(){
                 <button className="bg-gray-800 text-white px-5 py-2 me-3" onClick={logout}>Logout</button>
             </div>
 
-           
-            
+            <div >
+            <img src={Market} className="w-[1500px] h-[1200px]"/>
+  
+           </div> 
+
+
+  
+
+
+
+export default App;
+
+
+
 
             
            
